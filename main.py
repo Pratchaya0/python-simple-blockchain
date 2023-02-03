@@ -1,6 +1,7 @@
 import transection as tx
 import blockchain as bc
 import data as d
+import datetime
 
 def title_deed_data_input(tx_number):
     title_deed_number = str(input("\t\033[92mโฉนดที่ดินเลขที่:\033[0m "))
@@ -73,6 +74,7 @@ def write_a_block():
                     break
                 else:
                     print("Invalid Input! Please Input again")
+
 def update_block_data(block_index):
     temp = 0
     tx_number = 0
@@ -119,6 +121,31 @@ def check_blockchain_integrity():
 # create a new blockchain
 blockchain = bc.Blockchain()
 
+title_deed1 = d.Title_Deed(1, datetime.datetime.now(), 'V2W7+M42', 'V2R7+VQV', 'Bella Nguyen', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 1000, "Miliana O'Brien", "Latoya Harper")
+title_deed2 = d.Title_Deed(2, datetime.datetime.now(), 'V2R7+VQV', 'V2R9+HGF', 'Davina Kim', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 2000, "Miliana O'Brien", "Latoya Harper")
+title_deed3 = d.Title_Deed(3, datetime.datetime.now(), 'V2R9+HGF', 'V2Q8+5Q9', 'Alberte Collins', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 3000, "Miliana O'Brien", "Latoya Harper")
+title_deed4 = d.Title_Deed(4, datetime.datetime.now(), 'V2Q8+5Q9', 'V2P8+P42', 'Julia Dunn', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 4000, "Miliana O'Brien", "Latoya Harper")
+title_deed5 = d.Title_Deed(5, datetime.datetime.now(), 'V2P8+P42', 'V2J7+PXX', 'Lewis Simmons', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 5000, "Miliana O'Brien", "Latoya Harper")
+title_deed6 = d.Title_Deed(6, datetime.datetime.now(), 'V2J7+PXX', 'V2FF+XC2', 'Marvin Emerson', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 6000, "Miliana O'Brien", "Latoya Harper")
+title_deed7 = d.Title_Deed(7, datetime.datetime.now(), 'V2FF+XC2', 'V29C+XRQ', 'Frederick Hart', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 7000, "Miliana O'Brien", "Latoya Harper")
+title_deed8 = d.Title_Deed(8, datetime.datetime.now(), 'V29C+XRQ', 'V2HJ+977', 'Georgie Gordon', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 8000, "Miliana O'Brien", "Latoya Harper")
+title_deed9 = d.Title_Deed(9, datetime.datetime.now(), 'V2HJ+977', 'V2FJ+R9', 'Alana Cruz', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 9000, "Miliana O'Brien", "Latoya Harper")
+title_deed10 = d.Title_Deed(10, datetime.datetime.now(), 'V2FJ+R9', 'V2GM+CF', 'Nikolia Spencer', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 5500, "Miliana O'Brien", "Latoya Harper")
+title_deed11 = d.Title_Deed(3, datetime.datetime.now(), 'V2R9+HGF', 'V2Q8+5Q9', 'Nikolia Spencer', 'สุรนารี', 'เมืองนครราชสีมา', 'นครราชสีมา', 3000, "Miliana O'Brien", "Latoya Harper")
+
+blockchain.add_block([tx.Transaction(0, title_deed1)])
+blockchain.add_block([tx.Transaction(0, title_deed2)])
+blockchain.add_block([tx.Transaction(0, title_deed3)])
+blockchain.add_block([tx.Transaction(0, title_deed4)])
+blockchain.add_block([tx.Transaction(0, title_deed5)])
+blockchain.add_block([tx.Transaction(0, title_deed6)])
+blockchain.add_block([tx.Transaction(0, title_deed7)])
+blockchain.add_block([tx.Transaction(0, title_deed8)])
+blockchain.add_block([tx.Transaction(0, title_deed9)])
+blockchain.add_block([tx.Transaction(0, title_deed10)])
+blockchain.add_block([tx.Transaction(0, title_deed11)])
+
+
 # check if the blockchain is valid
 if blockchain.is_valid():
     print("The blockchain is valid.")
@@ -160,20 +187,38 @@ while True:
                 show_block_data(block)
                 print("============================================================== BLOCK #" + str(block_num) + "\n")
         elif option == 3:
-            name_to_find = str(input("Input you name=> "))
-            selected_txs = blockchain.get_transactions_by_owner_name(name_to_find)
-            print(f"Transactions for {name_to_find}:")
-            print("Found: ", len(selected_txs), " transactions")
-            if len(selected_txs) != 0:
-                for transaction in selected_txs:
-                    get_block_By_TxID = blockchain.get_block_by_tx_hash(transaction.hash)
-                    print("\n============================================================== BLOCK #" + str(get_block_By_TxID))
-                    print(f"Transaction#{transaction.index}")
-                    print_title_deed_data(transaction)
-                    print(f"Transaction hash: {transaction.hash}")
-                    print("============================================================== BLOCK #" + str(get_block_By_TxID) + "\n")
-            else:
-                print(f"Not found owner name: {name_to_find}")
+            print("Select read option")
+            print("1. select by owner name")
+            print("2. select by title deed number")
+            s_option = int(input("=> "))
+            if s_option == 1:
+                name_to_find = str(input("Input you name=> "))
+                selected_txs = blockchain.get_transactions_by_owner_name(name_to_find)
+                print(f"Transactions for Owner name #{name_to_find}:")
+                print("Found: ", len(selected_txs), " transactions")
+                if len(selected_txs) != 0:
+                    for transaction in selected_txs:
+                        get_block_By_TxID = blockchain.get_block_by_tx_hash(transaction.hash)
+                        print("\n============================================================== BLOCK #" + str(get_block_By_TxID))
+                        print(f"Transaction#{transaction.index}")
+                        print_title_deed_data(transaction)
+                        print(f"Transaction hash: {transaction.hash}")
+                        print("============================================================== BLOCK #" + str(get_block_By_TxID) + "\n")
+                else:
+                    print(f"Not found owner name: {name_to_find}")
+            elif s_option == 2:
+                num_to_find = int(input("Input you title deed number => "))
+                selected_txs = blockchain.get_transactions_by_title_deed_number(num_to_find)
+                print(f"Transactions for Title Deed #{num_to_find}:")
+                print("Found: ", len(selected_txs), " transactions")
+                if len(selected_txs) != 0:
+                    for transaction in selected_txs:
+                        get_block_By_TxID = blockchain.get_block_by_tx_hash(transaction.hash)
+                        print("\n============================================================== BLOCK #" + str(get_block_By_TxID))
+                        print(f"Transaction#{transaction.index}")
+                        print_title_deed_data(transaction)
+                        print(f"Transaction hash: {transaction.hash}")
+                        print("============================================================== BLOCK #" + str(get_block_By_TxID) + "\n")
         elif option == 4:
             block_index = int(input(f"You want to Edit data in Block #(0 -> {blockchain.block_count()-1})?: "))
             if block_index:

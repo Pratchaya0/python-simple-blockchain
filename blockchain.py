@@ -41,6 +41,14 @@ class Blockchain:
                 if tx.title_deed.owner == owner_name:
                     result.append(tx)
         return result
+
+    def get_transactions_by_title_deed_number(self, title_deed_number):
+        result = []
+        for block in self.chain:
+            for tx in block.data:
+                if tx.title_deed.title_deed_number == title_deed_number:
+                    result.append(tx)
+        return result
     
     def get_block_by_tx_hash(self, tx_hash):
         for block in self.chain:
