@@ -1,94 +1,104 @@
 import transection as tx
 import blockchain as bc
+import data as d
 
-def show_block_data(block, num_of_tx):
+def title_deed_data_input(tx_number):
+    title_deed_number = str(input("\t\033[92mโฉนดที่ดินเลขที่:\033[0m "))
+    data_time = str(input("\t\033[92mวัน-เวลาที่ออก:\033[0m "))
+    parcel_number =str(input("\t\033[92mเลขที่ดิน:\033[0m "))
+    near_parcel_number =str(input("\t\033[92mเลขที่ดินใกล้เคียง:\033[0m "))
+    owner = str(input("\t\033[92mเจ้าของ:\033[0m "))
+    subdistrict_name = str(input("\t\033[92mตำบล:\033[0m "))
+    district = str(input("\t\033[92mอำเภอ:\033[0m "))
+    province = str(input("\t\033[92mจังหวัด:\033[0m "))
+    estimated_area_of_land = str(input("\t\033[92mที่ดินแปลงนี้มีเนื้อที่ประมาณ:\033[0m "))
+    drafter = str(input("\t\033[92mผู้เขียนแผนที่:\033[0m "))
+    map_investigator =str(input("\t\033[92mผู้ตรวจแผนที่:\033[0m "))
+    title_deed = d.Title_Deed(title_deed_number, data_time, parcel_number, near_parcel_number, owner, subdistrict_name, district, province, estimated_area_of_land, drafter,  map_investigator)
+    return tx.Transaction(tx_number, title_deed)
+
+def print_title_deed_data(transaction):
+    details = ['title_deed_number', 'data_time', 'parcel_number', 'near_parcel_number', 'owner', 'subdistrict_name', 'district', 'province', 'estimated_area_of_land', 'drafter', 'map_investigator']
+    for detail in details:
+        print(f"\t\033[92m{detail.capitalize():<30}\033[0m{getattr(transaction.title_deed, detail)}")
+
+def show_block_data(block):
     if block:
         print(f"Block index: {block.index}")
         print(f"Previous block hash: {block.previous_hash}")
+        print("Total transactions:", block.txs_count())
         print("Block data:")
-        print("Total customers:", block.txs_count())
-        if block.txs_count() == 0:
+        if block.index == 0:
             print(f"\t{block.data}")
-        elif block.txs_count() == 1:
-            print(f"\tCustomer name: {block.data.name}")
-            print(f"\tCustomer phone number: {block.data.phone_number}")
-            print(f"\tCustomer email: {block.data.email}")
         else:
-            for customer in block.data:
-                print(f"\tCustomer name: {customer.name}")
-                print(f"\tCustomer phone number: {customer.phone_number}")
-                print(f"\tCustomer email: {customer.email}")
+            for transaction in block.data:
+                print("\033[94m")
+                print(f"transaction number : {transaction.index}")
+                print("\033[0m")
+                print_title_deed_data(transaction)
         print(f"Block hash: {block.hash}")
     else:
         print(f"No block found with index: {block.index}")
 
 def write_a_block():
     temp = 0
-    tx_number = 1
-    customer = []
-    customers = []
+    tx_number = 0
+    transaction = []
+    transactions = []
     option_type = ["C", "W", "c", "w"]
     while True:
+        block_number = blockchain.block_count()
         if temp == 0:
-            print(f"Input your {tx_number} Transection: ")
-            tx_name = str(input("Name: "))
-            tx_phone_number = str(input("Tel: "))
-            tx_email = str(input("email: "))
-            customer = tx.Customer(tx_name, tx_phone_number, tx_email)
-            customers.append(customer)
-            print(customers)
+            print(f"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Block#{block_number + 1}")
+            print(f"Input data to Transection NO.{tx_number} : ")
+            transaction = title_deed_data_input(tx_number)
+            transactions.append(transaction)
+            print("Transaction created: ", transaction.hash)
             tx_number += 1
             temp = 1
         elif temp == 11:
+            print(f"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Block#{block_number} created")
             break
         else:
             while True:
-                print("----------------------------------------------------------------")
-                option = str(input("Type (C) create next tx. or (W) exit [write a block] (C/W)?: "))
+                print("----------------------------------------------------------------------------\033[93m")
+                option = str(input("Type (C) create next d. or (W) exit [write a block] (C/W)?: "))
+                print("\033[0m----------------------------------------------------------------------------")
                 if option in option_type:
                     if option == "C" or option == "c":
                         temp = 0
                     else:
-                        if len(customers) == 1:
-                            blockchain.add_block(customer)
-                        else:
-                            blockchain.add_block(customers)
+                        blockchain.add_block(transactions)
                         temp = 11
                     break
                 else:
                     print("Invalid Input! Please Input again")
-                    
 def update_block_data(block_index):
     temp = 0
-    tx_number = 1
-    customer = []
-    customers = []
+    tx_number = 0
+    transactions = []
     option_type = ["C", "W", "c", "w"]
     while True:
         if temp == 0:
-            print(f"Input your {tx_number} Transection: ")
-            tx_name = str(input("Name: "))
-            tx_phone_number = str(input("Tel: "))
-            tx_email = str(input("email: "))
-            customer = tx.Customer(tx_name, tx_phone_number, tx_email)
-            customers.append(customer)
-            print(customers)
+            block_number = blockchain.block_count()
+            print(f"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Block#{block_number}")
+            print(f"Input data to Transection NO.{tx_number} : ")
+            transaction = title_deed_data_input(tx_number)
+            transactions.append(transaction)
             tx_number += 1
             temp = 1
         elif temp == 11:
+            print(f"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Block#{block_number} updated")
             break
         else:
             while True:
                 print("----------------------------------------------------------------")
-                option = str(input("Type (C) create next tx. or (W) exit [write a block] (C/W)?: "))
+                option = str(input("Type (C) create next d. or (W) exit [write a block] (C/W)?: "))
                 if option in option_type:
                     if option == "C" or option == "c":
                         temp = 0
                     else:
-                        if len(customers) == 1:
-                            blockchain.update_block_data(block_index, customer)
-                        else:
-                            blockchain.update_block_data(block_index, customers)
+                        blockchain.update_block_data(block_index, transactions)
                         temp = 11
                     break
                 else:
@@ -100,7 +110,7 @@ def check_blockchain_integrity():
         previous_block = blockchain.selectBlock(i-1)
         if current_block.previous_hash != previous_block.hash:
             print("\033[91m")
-            print(f"Blockchain integrity compromised at block {i}")
+            print(f"Blockchain integrity compromised at block {i - 1}")
             print("\033[0m")
             return 12
     print("\033[94m"+"Blockchain integrity intact."+"\033[0m")
@@ -108,21 +118,6 @@ def check_blockchain_integrity():
 
 # create a new blockchain
 blockchain = bc.Blockchain()
-
-# create some customer objects
-customer1 = tx.Customer("John Smith", "+1 555 123 4567", "john.smith@example.com")
-customer2 = tx.Customer("Jane Doe", "+1 555 789 1234", "jane.doe@example.com")
-customer3 = tx.Customer("Bob Johnson", "+1 555 567 8901", "bob.johnson@example.com")
-customer4 = tx.Customer("Jane Doe", "+1 555 789 8834", "jane.doe@example.com")
-
-# add the customer objects to the blockchain
-blockchain.add_block(customer1)
-blockchain.add_block(customer2)
-blockchain.add_block(customer3)
-blockchain.add_block(customer4)
-
-customers = [customer1, customer2, customer3, customer4]
-blockchain.add_block(customers)
 
 # check if the blockchain is valid
 if blockchain.is_valid():
@@ -137,7 +132,7 @@ while True:
     print("Please select option")
     print("1. write a block")
     print("2. read a block")
-    print("3. find your transection")
+    print("3. find data")
     print("4. Update date in block")
     print("5. Check block integrity")
     print("\033[0m")
@@ -146,9 +141,7 @@ while True:
     option = int(input("=> "))
     if option:
         if option == 1:
-            print("Hello world")
             write_a_block()
-            # input def
         elif option == 2:
             print("Select read option")
             print("1. list all block and data")
@@ -157,29 +150,30 @@ while True:
             if s_option == 1:
                 for i in range(0, blockchain.block_count()):
                     block = blockchain.selectBlock(i)
-                    num_of_tx = block.txs_count()
                     print("\n============================================================== BLOCK #" + str(i))
-                    show_block_data(block, num_of_tx)
+                    show_block_data(block)
                     print("============================================================== BLOCK #" + str(i) + "\n")
             elif s_option == 2:
                 block_num = int(input("Input Block number=> "))
                 block = blockchain.selectBlock(block_num)
-                num_of_tx = block.txs_count()
                 print("\n============================================================== BLOCK #" + str(block_num))
-                show_block_data(block, num_of_tx)
+                show_block_data(block)
                 print("============================================================== BLOCK #" + str(block_num) + "\n")
         elif option == 3:
             name_to_find = str(input("Input you name=> "))
-            found_blocks = blockchain.selectDataByOwnerName(name_to_find)
-            if found_blocks:
-                for block in found_blocks:
-                    print("\n============================================================== BLOCK #" + str(block.index))
-                    print(f"Found block with customer name: {block.data.name}")
-                    print(f"Customer phone number: {block.data.phone_number}")
-                    print(f"Customer email: {block.data.email}\n")
-                    print("============================================================== BLOCK #" + str(block.index) + "\n")
+            selected_txs = blockchain.get_transactions_by_owner_name(name_to_find)
+            print(f"Transactions for {name_to_find}:")
+            print("Found: ", len(selected_txs), " transactions")
+            if len(selected_txs) != 0:
+                for transaction in selected_txs:
+                    get_block_By_TxID = blockchain.get_block_by_tx_hash(transaction.hash)
+                    print("\n============================================================== BLOCK #" + str(get_block_By_TxID))
+                    print(f"Transaction#{transaction.index}")
+                    print_title_deed_data(transaction)
+                    print(f"Transaction hash: {transaction.hash}")
+                    print("============================================================== BLOCK #" + str(get_block_By_TxID) + "\n")
             else:
-                print(f"No block found with customer name: {name_to_find}")
+                print(f"Not found owner name: {name_to_find}")
         elif option == 4:
             block_index = int(input(f"You want to Edit data in Block #(0 -> {blockchain.block_count()-1})?: "))
             if block_index:
